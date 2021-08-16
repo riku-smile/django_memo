@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 from .models import Memo
-from django.shortcuts import get_object_or_404
+from .forms import MemoForm
 
 # Create your views here.
 
@@ -15,4 +16,30 @@ def detail(request, memo_id):
 
 
 def new_memo(request):
-    return render(request, 'app/new_memo.html')
+    if request.method == "POST":
+        form = MemoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('app:index')
+    else:
+        form = MemoForm
+    return render(request, 'app/new_memo.html', {'form': form})
+
+
+@require_POST
+def delete_memo(request, memo_id):
+    memo = get_object_or_404(Memo, id=memo_id)
+    memo.delete()
+    return redirect('app:index')
+
+
+def edit_memo(request, memo_id):
+    memo = get_object_or_404(Memo, id=memo_id)
+    if request.method == "POST":
+        form = MemoForm(request.POST, instance=memo)
+        if form.is_valid():
+            form.save()
+            return redirect('app:index')
+    else:
+        form = MemoForm(instance=memo)
+    return render(request, 'app/edit_memo.html', {'form': form, 'memo': memo})
