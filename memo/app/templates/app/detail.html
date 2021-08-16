@@ -2,7 +2,17 @@
     <a href="{% url 'app:index' %}">ホームに戻る</a>
 </div>
 
+<!-- メモ本文 -->
 <h2>{{ memo.title }}</h2>
 <div>
     {{ memo.text | linebreaks | urlize }}
 </div>
+
+<!-- 編集リンク -->
+<button><a class="btn" href="{% url 'app:edit_memo' memo.pk %}">編集</a></button>
+
+<!-- 削除リンク -->
+<form action="{% url 'app:delete_memo' memo.pk %}" method="POST">
+    {% csrf_token %}
+    <button class="btn" type="submit" onclick='return confirm("本当に削除しますか？")'>削除</button>
+</form>

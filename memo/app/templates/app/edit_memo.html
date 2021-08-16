@@ -1,7 +1,8 @@
 <div>
-    <a href="{% url 'app:index' %}">ホームに戻る</a>
+    <a href="{% url 'app:detail' memo.id %}">戻る</a>
 </div>
-<form action="{% url 'app:new_memo' %}" method="POST">
+
+<form action="{% url 'app:edit_memo' memo.id %}" method="POST">
     {% csrf_token %}
     <table>
         <tr>
@@ -13,5 +14,5 @@
           <td>{{ form.text }}</td>
         </tr>
       </table>
-    <button type="submit" class="btn">保存</button>
+    <button class="btn" type="submit">保存</button>
 </form>
