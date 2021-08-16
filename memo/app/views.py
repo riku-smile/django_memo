@@ -7,7 +7,8 @@ from .forms import MemoForm
 
 
 def index(request):
-    return render(request, 'app/index.html')
+    memos = Memo.objects.all().order_by('-updated_datetime')
+    return render(request, 'app/index.html', {'memos': memos})
 
 
 def detail(request, memo_id):
